@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Connexion Gmail (Simulation)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="google-body">
+    <div class="container">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Gmail_logo_%282013%29.svg/1200px-Gmail_logo_%282013%29.svg.png" alt="Gmail Logo">
+        </div>
+        <div class="form-container">
+            <h2 id="formTitle">Connexion</h2>
+            <p id="formSubtitle">Utilisez votre compte Google</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Adresse e-mail ou téléphone" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Saisissez votre mot de passe" required>
+                </div>
+                <div class="form-footer">
+                    <a href="#" class="link">Mot de passe oublié ?</a>
+                    <button type="submit" class="submit-btn">Suivant</button>
+                </div>
+            </form>
+
+            <form id="twoFactorForm" style="display: none;">
+                <div class="input-group">
+                    <label for="twoFactorCode" class="label-text">Saisissez le code de validation</label>
+                    <input type="text" id="twoFactorCode" placeholder="000000" maxlength="6" required>
+                </div>
+                <div class="form-footer">
+                    <a href="#" class="link">Essayer une autre méthode</a>
+                    <button type="submit" class="submit-btn">Vérifier</button>
+                </div>
+            </form>
+
+            <div class="security-warning" id="securityWarning" style="display: none;">
+                <p>⚠️ Vérification de sécurité en cours...</p>
+                <p>Veuillez confirmer votre identité via un code à 6 chiffres envoyé sur votre appareil.</p>
+            </div>
+        </div>
+        <div class="bottom-links">
+            <span class="lang-selector">Français</span>
+            <div class="footer-links">
+                <a href="#">Aide</a>
+                <a href="#">Confidentialité</a>
+                <a href="#">Conditions</a>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
