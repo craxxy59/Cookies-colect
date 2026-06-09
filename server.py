@@ -74,5 +74,9 @@ def admin_dashboard():
 def get_method():
     return jsonify({"method": current_method})
 
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"status": "alive"}), 200
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

